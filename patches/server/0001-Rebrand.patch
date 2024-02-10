@@ -1,0 +1,521 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kamillaova <me@kamillaova.dev>
+Date: Sat, 10 Feb 2024 13:44:45 +0300
+Subject: [PATCH] Rebrand
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index bc77b529a6345ccc79c344cfe807ff93396307d6..97ddeedacef82adae53ddad2b834933063d1f192 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -15,7 +15,7 @@ val alsoShade: Configuration by configurations.creating
+ dependencies {
+     // Gale start - project setup
+     // Depend on own API
+-    implementation(project(":leaf-api")) // Leaf
++    implementation(project(":cheaf-api")) // Leaf // Cheaf
+     // Depend on Paper MojangAPI
+     implementation("io.papermc.paper:paper-mojangapi:${project.version}") {
+         exclude("io.papermc.paper", "paper-api")
+@@ -105,7 +105,7 @@ tasks.jar {
+         attributes(
+             "Main-Class" to "org.bukkit.craftbukkit.Main",
+             "Implementation-Title" to "CraftBukkit",
+-            "Implementation-Version" to "git-Leaf-$implementationVersion", // Gale - branding changes // Leaf
++            "Implementation-Version" to "git-Cheaf-$implementationVersion", // Gale - branding changes // Leaf // Cheaf
+             "Implementation-Vendor" to date, // Paper
+             "Specification-Title" to "Bukkit",
+             "Specification-Version" to project.version,
+diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
+index 1ea04a20247c7154fc3e59693f28b993ff78e2b8..8ba90e3d5b7dbc8dc70bc366f155bbe5d8252dc9 100644
+--- a/src/main/java/com/destroystokyo/paper/Metrics.java
++++ b/src/main/java/com/destroystokyo/paper/Metrics.java
+@@ -593,7 +593,7 @@ public class Metrics {
+             boolean logFailedRequests = config.getBoolean("logFailedRequests", false);
+             // Only start Metrics, if it's enabled in the config
+             if (config.getBoolean("enabled", true)) {
+-                Metrics metrics = new Metrics("Leaf", serverUUID, logFailedRequests, Bukkit.getLogger()); // Gale - branding changes - metrics // Leaf - rebrand
++                Metrics metrics = new Metrics("Cheaf", serverUUID, logFailedRequests, Bukkit.getLogger()); // Gale - branding changes - metrics // Leaf - rebrand // Cheaf
+ 
+                 metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
+                     String minecraftVersion = Bukkit.getVersion();
+@@ -603,15 +603,15 @@ public class Metrics {
+ 
+                 metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
+                 metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : "offline"));
+-                final String leafVersion; // Gale - branding changes - metrics // Leaf - rebrand
++                final String cheafVersion; // Gale - branding changes - metrics // Leaf - rebrand // Cheaf
+                 final String implVersion = org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion();
+                 if (implVersion != null) {
+                     final String buildOrHash = implVersion.substring(implVersion.lastIndexOf('-') + 1);
+-                    leafVersion = "git-Leaf-%s-%s".formatted(Bukkit.getServer().getMinecraftVersion(), buildOrHash); // Gale - branding changes - metrics // Leaf - rebrand
++                    cheafVersion = "git-Cheaf-%s-%s".formatted(Bukkit.getServer().getMinecraftVersion(), buildOrHash); // Gale - branding changes - metrics // Leaf - rebrand // Cheaf
+                 } else {
+-                    leafVersion = "unknown"; // Gale - branding changes - metrics // Leaf - rebrand
++                    cheafVersion = "unknown"; // Gale - branding changes - metrics // Leaf - rebrand // Cheaf
+                 }
+-                metrics.addCustomChart(new Metrics.SimplePie("leaf_version", () -> leafVersion)); // Gale - branding changes - metrics // Leaf - rebrand
++                metrics.addCustomChart(new Metrics.SimplePie("cheaf_version", () -> cheafVersion)); // Gale - branding changes - metrics // Leaf - rebrand // Cheaf
+ 
+                 metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
+                     Map<String, Map<String, Integer>> map = new HashMap<>(2); // Gale - metrics - reduce HashMap capacity
+diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
+index b5f3f213da8a40d5184098af017c8e2669c3e58c..c9e4dd731a3caef6e4313c8512394af647850dc0 100644
+--- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
++++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
+@@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
+     @Override
+     protected LineReader buildReader(LineReaderBuilder builder) {
+         builder
+-                .appName("Leaf") // Gale - branding changes // Leaf
++                .appName("Cheaf") // Gale - branding changes // Leaf // Cheaf
+                 .variable(LineReader.HISTORY_FILE, java.nio.file.Paths.get(".console_history"))
+                 .completer(new ConsoleCommandCompleter(this.server))
+                 .option(LineReader.Option.COMPLETE_IN_WORD, true);
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 0f3e73414ec946915c0a048c3174d516c1c93d38..5435e3d9f2df5b241c1fd7510f84c784d5bd1ade 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -943,7 +943,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             We do not want people to report thread issues to Paper,
+             but we do want people to report thread issues to Gale.
+              */
+-            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PAPER - If you think this is a Leaf bug, please report it at https://github.com/Winds-Studio/Leaf/issues )"); // Leaf
++            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PAPER - If you think this is a Cheaf bug, please report it at https://github.com/ChaosMine/Cheaf/issues )"); // Leaf // Cheaf
+             // Gale end - branding changes
+             while (this.getRunningThread().isAlive()) {
+                 this.getRunningThread().stop();
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 30e31c99778eceb867c7c1eb4974a9cfdd422435..4ae1ee7c31045e8e5095134c5319c74e99d44bcb 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -267,7 +267,7 @@ import javax.annotation.Nullable; // Paper
+ import javax.annotation.Nonnull; // Paper
+ 
+ public final class CraftServer implements Server {
+-    private final String serverName = "Leaf"; // Paper // Gale - branding changes // Leaf
++    private final String serverName = "Cheaf"; // Paper // Gale - branding changes // Leaf // Cheaf
+     private final String serverVersion;
+     private final String bukkitVersion = Versioning.getBukkitVersion();
+     private final Logger logger = Logger.getLogger("Minecraft");
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index 17e3ee3a73a2347e9f0baa0ed1640a3b0e75ed16..dce0db6ac0e882f9dbaaff3827a365e202d5efe4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -11,7 +11,7 @@ public final class Versioning {
+     public static String getBukkitVersion() {
+         String result = "Unknown-Version";
+ 
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.dreeam.leaf/leaf-api/pom.properties"); // Gale - branding changes // Leaf
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/ru.chaosmine.cheaf/cheaf-api/pom.properties"); // Gale - branding changes // Leaf // Cheaf
+         Properties properties = new Properties();
+ 
+         if (stream != null) {
+diff --git a/src/main/java/org/dreeam/leaf/LeafConfig.java b/src/main/java/org/dreeam/leaf/LeafConfig.java
+index f798dcc331e9251ccb1161b251f7f2d5a94fa7a3..33927dbb67534eeaf61dd33b09b81db10cfa9046 100644
+--- a/src/main/java/org/dreeam/leaf/LeafConfig.java
++++ b/src/main/java/org/dreeam/leaf/LeafConfig.java
+@@ -167,8 +167,8 @@ public class LeafConfig {
+         return builder.build();
+     }
+ 
+-    public static String serverModName = "Leaf";
+-    public static String serverGuiName = "Leaf Console";
++    public static String serverModName = "Cheaf"; // Cheaf
++    public static String serverGuiName = "Cheaf Console"; // Cheaf
+     private static void serverModName() {
+         serverModName = getString("server-mod-name", serverModName);
+         serverGuiName = getString("server-Gui-name", serverGuiName);
+diff --git a/src/main/java/org/galemc/gale/version/GaleVersionFetcher.java b/src/main/java/org/galemc/gale/version/GaleVersionFetcher.java
+index 9f96c6a23372f496a5c71fda8c688d73d82b904c..98fbe393df611ac7b90c70d608a03a9fdbb2f723 100644
+--- a/src/main/java/org/galemc/gale/version/GaleVersionFetcher.java
++++ b/src/main/java/org/galemc/gale/version/GaleVersionFetcher.java
+@@ -5,7 +5,7 @@ package org.galemc.gale.version;
+ public class GaleVersionFetcher extends AbstractPaperVersionFetcher {
+ 
+     public GaleVersionFetcher() {
+-        super("ver/1.20.2", "https://github.com/Winds-Studio/Leaf", "Leaf", "Winds-Studio", "Winds-Studio", "Leaf"); // Leaf
++        super("ver/1.20.4", "https://github.com/ChaosMine/Cheaf", "Cheaf", "ChaosMine", "ChaosMine", "Cheaf"); // Leaf - rebrand // Cheaf
+     }
+ 
+ }
+diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
+index f82038f47074302bdd9a2e25110ac207b9d36fec..9f112dcbf1991e389c9c780c85275fce79fdc502 100644
+--- a/src/main/java/org/spigotmc/WatchdogThread.java
++++ b/src/main/java/org/spigotmc/WatchdogThread.java
+@@ -160,15 +160,15 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                 We do not want people to report thread issues to Paper,
+                 but we do want people to report thread issues to Gale.
+                  */
+-                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Paper bug. This could be a Leaf bug." ); // Paper // Leaf
++                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Paper bug. This could be a Cheaf bug." ); // Paper // Leaf // Cheaf
+                 // Gale end - branding changes
+                 log.log( Level.SEVERE, "If you see a plugin in the Server thread dump below, then please report it to that author" );
+                 log.log( Level.SEVERE, "\t *Especially* if it looks like HTTP or MySQL operations are occurring" );
+                 log.log( Level.SEVERE, "If you see a world save or edit, then it means you did far more than your server can handle at once" );
+                 log.log( Level.SEVERE, "\t If this is the case, consider increasing timeout-time in spigot.yml but note that this will replace the crash with LARGE lag spikes" );
+-                log.log( Level.SEVERE, "If you are unsure or think this is a Leaf bug, please report this to https://github.com/Winds-Studio/Leaf/issues - and if you think this is a Paper bug, please report this to https://github.com/PaperMC/Paper/issues" ); // Gale - branding changes // Leaf
++                log.log( Level.SEVERE, "If you are unsure or think this is a Cheaf bug, please report this to https://github.com/ChaosMine/Cheaf/issues - and if you think this is a Paper bug, please report this to https://github.com/PaperMC/Paper/issues" ); // Gale - branding changes // Leaf // Cheaf
+                 log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
+-                log.log( Level.SEVERE, "Leaf version: " + Bukkit.getServer().getVersion() ); // Gale - branding changes // Leaf
++                log.log( Level.SEVERE, "Cheaf version: " + Bukkit.getServer().getVersion() ); // Gale - branding changes // Leaf // Cheaf
+                 //
+                 if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
+                 {
+@@ -195,13 +195,13 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                     We do not want people to report thread issues to Paper,
+                     but we do want people to report thread issues to Gale.
+                      */
+-                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PAPER - If you think this is a Leaf bug, please report it at https://github.com/Winds-Studio/Leaf/issues - THIS IS NOT A PAPER BUG OR CRASH - " + Bukkit.getServer().getVersion() + " ---"); // Leaf
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PAPER - If you think this is a Cheaf bug, please report it at https://github.com/ChaosMine/Cheaf/issues - THIS IS NOT A PAPER BUG OR CRASH - " + Bukkit.getServer().getVersion() + " ---"); // Leaf // Cheaf
+                     // Gale end - branding changes
+                     log.log(Level.SEVERE, "The server has not responded for " + (currentTime - lastTick) / 1000 + " seconds! Creating thread dump");
+                 }
+                 // Paper end - Different message for short timeout
+                 log.log( Level.SEVERE, "------------------------------" );
+-                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Leaf!):" ); // Paper // Gale - branding changes // Leaf
++                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Cheaf!):" ); // Paper // Gale - branding changes // Leaf // Cheaf
+                 io.papermc.paper.chunk.system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper - rewrite chunk system
+                 this.dumpTickingInfo(); // Paper - log detailed tick information
+                 WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE ), log );
+@@ -222,7 +222,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                     We do not want people to report thread issues to Paper,
+                     but we do want people to report thread issues to Gale.
+                      */
+-                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PAPER - If you think this is a Leaf bug, please report it at https://github.com/Winds-Studio/Leaf/issues - THIS IS NOT A PAPER BUG OR CRASH ---"); // Leaf
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PAPER - If you think this is a Cheaf bug, please report it at https://github.com/ChaosMine/Cheaf/issues - THIS IS NOT A PAPER BUG OR CRASH ---"); // Leaf // Cheaf
+                     // Gale end - branding changes
+                 }
+ 
+diff --git a/src/main/resources/logo.png b/src/main/resources/logo.png
+index 0956ce407eed35c25e511918d385b4fa402e17d5..74470167f63e26e0972c4d8f62d618af2fda4241 100644
+GIT binary patch
+literal 8058
+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
+X@_){M&36yKRym9fuIiU#oTL8>><b$L
+
+literal 8808
+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
+
