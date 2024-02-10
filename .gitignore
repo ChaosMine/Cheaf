@@ -1,0 +1,27 @@
+*
+!*/
+
+!/.git*
+!/licenses/.git*
+!/gradle/wrapper/.git*
+
+!/README*
+!/LICENSE*
+
+!/gradlew
+!/gradlew.bat
+!/build.gradle.kts
+!/settings.gradle.kts
+!/gradle.properties
+
+!/patches/**/*.patch
+
+# Force ignore
+build/**/*
+.idea/**/*
+.gradle/**/*
+
+/Cheaf-API/
+/Cheaf-MojangAPI/
+/Cheaf-Server/
+/paper-api-generator/
