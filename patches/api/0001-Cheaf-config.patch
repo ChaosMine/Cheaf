@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kamillaova <me@kamillaova.dev>
+Date: Mon, 12 Feb 2024 13:06:24 +0300
+Subject: [PATCH] Cheaf config
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 0d6b1e7225060cdb027f446acba4d5d2143d4a9a..0f18617093cf5d4687f72657baab768687219772 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -78,6 +78,7 @@ dependencies {
+     testImplementation("org.mockito:mockito-core:5.10.0")
+     testImplementation("org.ow2.asm:asm-tree:9.6")
+     // Leaf end
++    api("net.elytrium.commons:config:1.2.5") // Cheaf - add config serializer
+ }
+ 
+ // Paper start
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 1e7e16d33a57d930276a07096a58be2f6178ccc7..062870c2e0da06a85597e1e13c6b25c15d75b072 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2271,6 +2271,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+         }
+         // Leaf end
+ 
++        // Cheaf start
++        @NotNull
++        public org.bukkit.configuration.file.YamlConfiguration getCheafConfig()
++        {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++        // Cheaf end
++
+         /**
+          * Sends the component to the player
+          *
+diff --git a/src/main/java/ru/chaosmine/config/CheafConfig.java b/src/main/java/ru/chaosmine/config/CheafConfig.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..30049a7d5170811fe738e7cff892b1a6262592c3
+--- /dev/null
++++ b/src/main/java/ru/chaosmine/config/CheafConfig.java
+@@ -0,0 +1,16 @@
++package ru.chaosmine.config;
++
++import net.elytrium.commons.config.YamlConfig;
++
++import java.nio.file.Path;
++
++public class CheafConfig extends YamlConfig {
++	@Ignore
++	public static final CheafConfig INSTANCE = new CheafConfig();
++	@Ignore
++	public static Path CONFIG_PATH = Path.of("cheaf.yml");
++
++	public static void load() {
++		INSTANCE.reload(CONFIG_PATH);
++	}
++}
