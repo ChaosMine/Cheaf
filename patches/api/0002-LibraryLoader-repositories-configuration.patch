@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kamillaova <me@kamillaova.dev>
+Date: Mon, 12 Feb 2024 16:04:59 +0300
+Subject: [PATCH] LibraryLoader repositories configuration
+
+
+diff --git a/src/main/java/org/bukkit/plugin/java/LibraryLoader.java b/src/main/java/org/bukkit/plugin/java/LibraryLoader.java
+index 78a6e7a31a81bc82d3e3687661e16c6d8ebc4617..a1b4a0968ae9f8194c26ceb75e50165bb5b8125c 100644
+--- a/src/main/java/org/bukkit/plugin/java/LibraryLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/LibraryLoader.java
+@@ -72,7 +72,12 @@ public class LibraryLoader
+         } );
+         session.setReadOnly();
+ 
+-        this.repositories = repository.newResolutionRepositories( session, Arrays.asList( new RemoteRepository.Builder( "central", "default", "https://repo.maven.apache.org/maven2" ).build() ) );
++        // Cheaf start - add the ability to configure maven repositories list
++        var repositoriesList = ru.chaosmine.config.CheafConfig.INSTANCE.LIBRARY_LOADER.MAVEN_REPOSITORIES
++            .entrySet().stream().map(x -> new RemoteRepository.Builder(x.getKey(), "default", x.getValue()).build())
++            .collect(java.util.stream.Collectors.toList());
++        this.repositories = repository.newResolutionRepositories( session, repositoriesList );
++        // Cheaf end
+     }
+ 
+     @Nullable
+diff --git a/src/main/java/ru/chaosmine/config/CheafConfig.java b/src/main/java/ru/chaosmine/config/CheafConfig.java
+index 30049a7d5170811fe738e7cff892b1a6262592c3..0b668d1bb72afc79707212420e41b655fd5123b6 100644
+--- a/src/main/java/ru/chaosmine/config/CheafConfig.java
++++ b/src/main/java/ru/chaosmine/config/CheafConfig.java
+@@ -3,6 +3,7 @@ package ru.chaosmine.config;
+ import net.elytrium.commons.config.YamlConfig;
+ 
+ import java.nio.file.Path;
++import java.util.Map;
+ 
+ public class CheafConfig extends YamlConfig {
+ 	@Ignore
+@@ -10,6 +11,17 @@ public class CheafConfig extends YamlConfig {
+ 	@Ignore
+ 	public static Path CONFIG_PATH = Path.of("cheaf.yml");
+ 
++	@Create
++	public LibraryLoader LIBRARY_LOADER;
++
++	@Comment("Settings for Spigot Library Loader")
++	public static class LibraryLoader {
++		@Comment("List of Maven repositories for Library Loader")
++		public Map<String, String> MAVEN_REPOSITORIES = Map.of(
++			"central", "https://repo.maven.apache.org/maven2/"
++		);
++	}
++
+ 	public static void load() {
+ 		INSTANCE.reload(CONFIG_PATH);
+ 	}
