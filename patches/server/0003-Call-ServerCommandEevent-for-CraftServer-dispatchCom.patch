@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kamillaova <me@kamillaova.dev>
+Date: Mon, 12 Feb 2024 13:36:37 +0300
+Subject: [PATCH] Call ServerCommandEevent for CraftServer#dispatchCommand
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 30e31c99778eceb867c7c1eb4974a9cfdd422435..c8ae9859ba22cbdc48fd556a44434d94ba57feaf 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1002,6 +1002,13 @@ public final class CraftServer implements Server {
+         Preconditions.checkArgument(commandLine != null, "commandLine cannot be null");
+         org.spigotmc.AsyncCatcher.catchOp("Command Dispatched Async: " + commandLine); // Spigot // Paper - Include command in error message
+ 
++        // Cheaf start - call ServerCommandEevent for CraftServer#dispatchCommand
++        var scev = new org.bukkit.event.server.ServerCommandEvent(this.getConsoleSender(), commandLine);
++        this.getPluginManager().callEvent(scev);
++        if (scev.isCancelled()) return true;
++        commandLine = scev.getCommand();
++        // Cheaf end
++
+         if (this.commandMap.dispatch(sender, commandLine)) {
+             return true;
+         }
