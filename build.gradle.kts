@@ -61,6 +61,7 @@ subprojects {
 		maven("https://hub.spigotmc.org/nexus/content/groups/public/")
 		maven("https://jitpack.io")
 		maven("https://repo.codemc.io/repository/maven-public/")
+		maven("https://maven.elytrium.net/repo/")
 	}
 }
 
