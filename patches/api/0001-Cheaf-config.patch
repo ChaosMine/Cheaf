@@ -5,7 +5,7 @@ Subject: [PATCH] Cheaf config
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 0d6b1e7225060cdb027f446acba4d5d2143d4a9a..0f18617093cf5d4687f72657baab768687219772 100644
+index 88929400dc1ea29c6924a153492f804c2ed3edf5..6e696c4d8d1a9163d989cfd703abad0f77f172cf 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -78,6 +78,7 @@ dependencies {
@@ -17,10 +17,10 @@ index 0d6b1e7225060cdb027f446acba4d5d2143d4a9a..0f18617093cf5d4687f72657baab7686
  
  // Paper start
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 1e7e16d33a57d930276a07096a58be2f6178ccc7..062870c2e0da06a85597e1e13c6b25c15d75b072 100644
+index c0f2975cf31a32610950968a9420f659d44e16b5..4a0375e81b28db0d2b1bce9b088c49b97123e0e7 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2271,6 +2271,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2287,6 +2287,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
          }
          // Leaf end
  
